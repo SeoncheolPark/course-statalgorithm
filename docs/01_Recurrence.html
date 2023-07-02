@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Seoncheol Park">
 
-<title>statcomput</title>
+<title>statcomput - Recurrence Relations</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -93,6 +60,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -115,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./index.html" rel="" target="">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -123,7 +92,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./01_Recurrence.html" rel="" target="">
+    <a class="nav-link active" href="./01_Recurrence.html" rel="" target="" aria-current="page">
  <span class="menu-text">Recurrence Relations</span></a>
   </li>  
 </ul>
@@ -138,20 +107,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#horners-method" id="toc-horners-method" class="nav-link active" data-scroll-target="#horners-method">Horner’s Method</a></li>
+  <li><a href="#sample-means-and-variances" id="toc-sample-means-and-variances" class="nav-link" data-scroll-target="#sample-means-and-variances">Sample Means and Variances</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">statcomput</h1>
+<h1 class="title">Recurrence Relations</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Seoncheol Park </p>
+          </div>
+  </div>
     
   
     
@@ -160,16 +142,128 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>This is a Quarto website.</p>
-<p>To learn more about Quarto websites visit <a href="https://quarto.org/docs/websites" class="uri">https://quarto.org/docs/websites</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="horners-method" class="level2">
+<h2 class="anchored" data-anchor-id="horners-method">Horner’s Method</h2>
+<ul>
+<li><p>Suppose we desire to evaluate the polynomial <span class="math display">\[
+p(x) = a_0 x^n + a_1 x^{n-1} + \cdots + a_{n-1}x + a_n
+\]</span> for a particular value of <span class="math inline">\(x\)</span>.</p></li>
+<li><p>If we proceed naively, then it takes</p>
+<ul>
+<li><span class="math inline">\(n-1\)</span> multiplications to form the powers <span class="math inline">\(x^k = x\cdot x^{k-1}\)</span> for <span class="math inline">\(2\leq k \leq n\)</span>,</li>
+<li><span class="math inline">\(n\)</span> multiplications to multiply each power <span class="math inline">\(x^k\)</span> by its coefficient <span class="math inline">\(a_{n-k}\)</span>, and</li>
+<li><span class="math inline">\(n\)</span> additions to sum the resulting terms. (<strong>total</strong> <span class="math inline">\(3n-1\)</span> operations)</li>
+</ul></li>
+<li><p><strong>Horner’s method</strong> exploits the fact that <span class="math inline">\(p(x)\)</span> can be expressed as</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+p(x) &amp;= x(a_0 x^{n-1} + a_1 x^{n-2} + \cdots + a_{n-1}) + a_n\\
+&amp;= xb_{n-1}(x) + a_n.
+\end{align*}\]</span></p>
+<ul>
+<li>Since the polynomial <span class="math inline">\(b_{n-1}(x)\)</span> of degree <span class="math inline">\(n-1\)</span> can be similarly reduced, a complete recursive scheme for evaluating <span class="math inline">\(p(x)\)</span> is given by</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+b_0(x) &amp;= a_0\\
+b_k (x) &amp;= xb_{k-1}(x) + a_k, \quad{} k=1,\ldots, n.
+\end{align*}\]</span></p>
+<ul>
+<li><p><strong>Horner’s method</strong> requires only <span class="math inline">\(n\)</span> multiplications and <span class="math inline">\(n\)</span> additions to compute <span class="math inline">\(p(x) = b_n (x)\)</span>.</p></li>
+<li><p>Horner’s method can be modified to produce the derivative <span class="math inline">\(p′(x)\)</span>:</p></li>
+</ul>
+<!--
+앞의 식을 미분
+-->
+<p><span class="math display">\[\begin{align*}
+b_1'(x) &amp;= b_0(x)\\
+b_k' (x) &amp;= xb_{k-1}'(x) + b_{k-1}(x), \quad{} k=2,\ldots, n.
+\end{align*}\]</span></p>
+<ul>
+<li>Amended Horner scheme requires an additional <span class="math inline">\(n−1\)</span> multiplications and <span class="math inline">\(n−1\)</span> additions to compute <span class="math inline">\(p'(x) = b_n'(x)\)</span>.</li>
+</ul>
+</section>
+<section id="sample-means-and-variances" class="level2">
+<h2 class="anchored" data-anchor-id="sample-means-and-variances">Sample Means and Variances</h2>
+<ul>
+<li><p>Consider a sequence <span class="math inline">\(x_1, \ldots, x_n\)</span> of <span class="math inline">\(n\)</span> real numbers. After you have computed the sample mean and variance <span class="math display">\[
+\mu_n =\frac{1}{n}\sum_{i=1}^n x_i, \quad{} \sigma_n^2 =\frac{1}{n}\sum_{i=1}^n (x_i - \mu_n)^2.
+\]</span></p></li>
+<li><p>Suppose you are presented with a new observation <span class="math inline">\(x_{n+1}\)</span>. It is possible to adjust the sample mean and variance without revisiting all of the previous observations. <span class="math display">\[
+\mu_{n+1} = \frac{1}{n+1}(n\mu_n + x_{n+1}).
+\]</span></p></li>
+<li><p>Because <span class="math display">\[
+(n+1)\sigma_{n+1}^2 &amp;= \sum_{i=1}^{n+1}(x_i - \mu_{n+1})^2\\
+&amp;=
+\]</span></p></li>
+</ul>
+<p>
+<script type="application/shiny-prerendered" data-context="server-start">
+knitr::opts_chunk$set(echo = TRUE)
+library(learnr)
+library(gradethis)
+library(qss)
+library(qsslearnr)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::register_http_handlers(session, metadata = NULL)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::prepare_tutorial_state(session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::i18n_observe_tutorial_language(input, session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+session$onSessionEnded(function() {
+        learnr:::event_trigger(session, "session_stop")
+      })
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server-extras">
+ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
+  quos <- rlang::enquos(...)
+  vars <- rlang::list2(...)
+  nm <- names(vars)
+  if (is.null(nm)) {
+    nm <- rep_len("", length(vars))
+  }
+  mapply(function(q, nm, val) {
+    # Infer name, if possible
+    if (nm == "") {
+      tryCatch({
+        nm <- rlang::as_name(q)
+      }, error = function(e) {
+        code <- paste(collapse = "\n", deparse(rlang::f_rhs(q)))
+        stop("ojs_define() could not create a name for the argument: ", code)
+      })
+    }
+    .session$output[[nm]] <- val
+    outputOptions(.session$output, nm, suspendWhenHidden = FALSE)
+    .session$sendCustomMessage("ojs-export", list(name = nm))
+    NULL
+  }, quos, nm, vars, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+  invisible()
+}
+</script>
+</p>
+<!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="dependencies">
+{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["3.6.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/3.6.0"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery-3.6.0.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquerylib"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.1.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["6.2.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.min.css","css/v4-shims.min.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fontawesome"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.0"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["bootbox"]},{"type":"character","attributes":{},"value":["5.5.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/bootbox"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["bootbox.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.11.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["idb-keyvalue"]},{"type":"character","attributes":{},"value":["3.2.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/idb-keyval"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["idb-keyval-iife-compat.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["0.11.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial"]},{"type":"character","attributes":{},"value":["0.11.4"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial.js"]},{"type":"character","attributes":{},"value":["tutorial.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.11.4"]}]}]}
+</script>
+<!--/html_preserve-->
+<!--html_preserve-->
+
+<script type="application/shiny-prerendered" data-context="execution_dependencies">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71]}},"value":[{"type":"character","attributes":{},"value":["base","bitops","brio","callr","cli","compiler","crayon","cyclocomp","datasets","desc","digest","ellipsis","evaluate","fastmap","fontawesome","glue","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","httr","igraph","jquerylib","jsonlite","knitr","later","lazyeval","learnr","lifecycle","lintr","magrittr","maps","methods","mime","NLP","parallel","pkgconfig","processx","promises","ps","qss","qsslearnr","R6","RColorBrewer","Rcpp","RCurl","remotes","rex","rlang","rmarkdown","rprojroot","rstudioapi","shiny","slam","SnowballC","stats","stringi","stringr","swirl","testthat","tm","tools","utils","withr","wordcloud","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["4.2.3","1.0-7","1.1.3","3.7.3","3.6.1","4.2.3","1.5.2","1.1.0","4.2.3","1.4.2","0.6.31","0.3.2","0.20","1.1.1","0.5.0","1.6.2","0.2.13.9000","4.2.3","4.2.3","0.5.5","1.6.2","1.6.9","1.4.5","1.4.2","0.1.4","1.8.4","1.42","1.3.0","0.2.2","0.11.4","1.0.3","3.0.2","2.0.3","3.4.1","4.2.3","0.12","0.2-1","4.2.3","2.0.3","3.8.1","1.2.0.1","1.7.5","0.1.0.9000","0.1.0.9003","2.5.1","1.1-3","1.0.10","1.98-1.12","2.4.2","1.2.1","1.1.1","2.21","2.0.3","0.14","1.7.4","0.1-50","0.7.1","4.2.3","1.7.12","1.5.0","2.4.5","3.1.7","0.7-11","4.2.3","4.2.3","2.5.0","2.6","0.38","1.3.3","1.8-4","2.3.7"]}]}]}
+</script>
+<!--/html_preserve-->
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

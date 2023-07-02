@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "01_Recurrence.html",
+    "href": "01_Recurrence.html",
+    "title": "Recurrence Relations",
+    "section": "",
+    "text": "Suppose we desire to evaluate the polynomial \\[\np(x) = a_0 x^n + a_1 x^{n-1} + \\cdots + a_{n-1}x + a_n\n\\] for a particular value of \\(x\\).\nIf we proceed naively, then it takes\n\n\\(n-1\\) multiplications to form the powers \\(x^k = x\\cdot x^{k-1}\\) for \\(2\\leq k \\leq n\\),\n\\(n\\) multiplications to multiply each power \\(x^k\\) by its coefficient \\(a_{n-k}\\), and\n\\(n\\) additions to sum the resulting terms. (total \\(3n-1\\) operations)\n\nHorner’s method exploits the fact that \\(p(x)\\) can be expressed as\n\n\\[\\begin{align*}\np(x) &= x(a_0 x^{n-1} + a_1 x^{n-2} + \\cdots + a_{n-1}) + a_n\\\\\n&= xb_{n-1}(x) + a_n.\n\\end{align*}\\]\n\nSince the polynomial \\(b_{n-1}(x)\\) of degree \\(n-1\\) can be similarly reduced, a complete recursive scheme for evaluating \\(p(x)\\) is given by\n\n\\[\\begin{align*}\nb_0(x) &= a_0\\\\\nb_k (x) &= xb_{k-1}(x) + a_k, \\quad{} k=1,\\ldots, n.\n\\end{align*}\\]\n\nHorner’s method requires only \\(n\\) multiplications and \\(n\\) additions to compute \\(p(x) = b_n (x)\\).\nHorner’s method can be modified to produce the derivative \\(p′(x)\\):\n\n\n\\[\\begin{align*}\nb_1'(x) &= b_0(x)\\\\\nb_k' (x) &= xb_{k-1}'(x) + b_{k-1}(x), \\quad{} k=2,\\ldots, n.\n\\end{align*}\\]\n\nAmended Horner scheme requires an additional \\(n−1\\) multiplications and \\(n−1\\) additions to compute \\(p'(x) = b_n'(x)\\)."
+  },
+  {
+    "objectID": "01_Recurrence.html#horners-method",
+    "href": "01_Recurrence.html#horners-method",
+    "title": "Recurrence Relations",
+    "section": "",
+    "text": "Suppose we desire to evaluate the polynomial \\[\np(x) = a_0 x^n + a_1 x^{n-1} + \\cdots + a_{n-1}x + a_n\n\\] for a particular value of \\(x\\).\nIf we proceed naively, then it takes\n\n\\(n-1\\) multiplications to form the powers \\(x^k = x\\cdot x^{k-1}\\) for \\(2\\leq k \\leq n\\),\n\\(n\\) multiplications to multiply each power \\(x^k\\) by its coefficient \\(a_{n-k}\\), and\n\\(n\\) additions to sum the resulting terms. (total \\(3n-1\\) operations)\n\nHorner’s method exploits the fact that \\(p(x)\\) can be expressed as\n\n\\[\\begin{align*}\np(x) &= x(a_0 x^{n-1} + a_1 x^{n-2} + \\cdots + a_{n-1}) + a_n\\\\\n&= xb_{n-1}(x) + a_n.\n\\end{align*}\\]\n\nSince the polynomial \\(b_{n-1}(x)\\) of degree \\(n-1\\) can be similarly reduced, a complete recursive scheme for evaluating \\(p(x)\\) is given by\n\n\\[\\begin{align*}\nb_0(x) &= a_0\\\\\nb_k (x) &= xb_{k-1}(x) + a_k, \\quad{} k=1,\\ldots, n.\n\\end{align*}\\]\n\nHorner’s method requires only \\(n\\) multiplications and \\(n\\) additions to compute \\(p(x) = b_n (x)\\).\nHorner’s method can be modified to produce the derivative \\(p′(x)\\):\n\n\n\\[\\begin{align*}\nb_1'(x) &= b_0(x)\\\\\nb_k' (x) &= xb_{k-1}'(x) + b_{k-1}(x), \\quad{} k=2,\\ldots, n.\n\\end{align*}\\]\n\nAmended Horner scheme requires an additional \\(n−1\\) multiplications and \\(n−1\\) additions to compute \\(p'(x) = b_n'(x)\\)."
+  },
+  {
+    "objectID": "01_Recurrence.html#sample-means-and-variances",
+    "href": "01_Recurrence.html#sample-means-and-variances",
+    "title": "Recurrence Relations",
+    "section": "Sample Means and Variances",
+    "text": "Sample Means and Variances\n\nConsider a sequence \\(x_1, \\ldots, x_n\\) of \\(n\\) real numbers. After you have computed the sample mean and variance \\[\n\\mu_n =\\frac{1}{n}\\sum_{i=1}^n x_i, \\quad{} \\sigma_n^2 =\\frac{1}{n}\\sum_{i=1}^n (x_i - \\mu_n)^2.\n\\]\nSuppose you are presented with a new observation \\(x_{n+1}\\). It is possible to adjust the sample mean and variance without revisiting all of the previous observations. \\[\n\\mu_{n+1} = \\frac{1}{n+1}(n\\mu_n + x_{n+1}).\n\\]\nBecause \\[\n(n+1)\\sigma_{n+1}^2 &= \\sum_{i=1}^{n+1}(x_i - \\mu_{n+1})^2\\\\\n&=\n\\]"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "statcomput",
